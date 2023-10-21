@@ -7,9 +7,6 @@
 3. [Implementation details](#implementation-details)
 4. [Endpoints & Routes](#endpoints--routes)
    - [User endpoints](#user-endpoints)
-   - [User authentication routes](#user-authentication-routes)
-   - [Specialization endpoints](#specialization-endpoints)
-   - [Disease endpoints](#disease-endpoints)
    - [Appointment endpoints](#appointment-endpoints)
 5. [Installation](#installation)
 6. [Dockerization](#dockerization)
@@ -36,44 +33,414 @@ This API follows a RESTful principles, providing endpoints for the standard CRUD
 
 ### User endpoints
 
-- **GET** __`api/v1/users`__ - Get all users.
-- **GET** __`api/users/:id`__ - Get a user.
-- **PUT** __`api/users/:id`__ - Update a user.
-- **DELETE** __`api/users/:id`__ - Delete a user.
+- **Request GET** __`/users`__ - Get all users.
+
+**Response**: 200 OK success status response.
+Content-Type: application/json.
+```
+   [
+   {
+      "id": "1",
+      "role_id": "1",
+      "email": "olena@gmail.com",
+      "first_name": "Olena",
+      "last_name: "Vakulenko",
+    },
+    {
+      "id": "2",
+      "role_id": "2",
+      "email": "Ivana@gmail.com",
+      "first_name": Ivan",
+      "last_name: "Vakulenko",
+    },
+    ...
+    ]
+```
+
+- **Request GET** __`/users/{userId}`__ - Get a user.
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `userId`  | string | Yes      | The user ID. |
 
 
-### User authentication routes
+**Response**: 
+Content-Type: application/json.
 
-- **GET** __`api/v1/users/signup`__ - Render the sign-up page.
-- **GET** __`api/v1/users/login`__ - Render the log-in page.
-- **POST** __`api/v1/users/signup`__ - Handle user sign-up and create a new user.
-- **POST** __`api/v1/users/login`__ - Handle user log-in.
-- **GET** __`api/v1/users/logout`__ - Handle user logout and invalidate the JSON Web Token (JWT).
+```
+    If the record with id === userId exists:
 
-### Specialization endpoints
+    200 OK success status response
+    
+    [{
+      "id": "{userId}",
+      "role_id": "1",
+      "email": "olena@gmail.com",
+      "first_name": "Olena",
+      "last_name: "Vakulenko",
+    }]
 
-- **GET** __`api/v1/specializations`__ - Get all specializations.
-- **GET** __`api/specializations/:id`__ - Get a specialization.
-- **POST** __`api/specializations`__ - Create a new specialization.
-- **PUT** __`api/specializations/:id`__ - Update a specialization.
-- **DELETE** __`api/specializations/:id`__ - Delete a specialization.
+    If userId is invalid (not uuid):
 
-### Disease endpoints
+    400 Bad Request
 
-- **GET** __`api/v1/diseases`__ - Get all diseases.
-- **GET** __`api/diseases/:id`__ - Get a disease.
-- **POST** __`api/diseases`__ - Create a new disease.
-- **PUT** __`api/diseases/:id`__ - Update a disease.
-- **DELETE** __`api/diseases/:id`__ - Delete a disease.
+    [{
+      "error": "Invalid user ID."
+    }]
+
+    If the record with id === userId doesn't exist:
+
+   404 Not Found
+    
+    [{
+      "error": "User not found."
+    }]
+```
+
+- **Request POST** __`users`__ - create a new user (id will be added automatically).
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `email`  | string | Yes      |  User's email. |
+| `first_name`  | string | Yes      | User's first name. |
+| `last_name`  | string | Yes      |  User's last name. |
+
+**Response**: 
+Content-Type: application/json.
+
+```
+    If the record was successfully created:
+    201 Created
+    [{
+      "id": "3",
+      role_id: "3",
+      "email": "kolpakov@gmail.com",
+      "first_name": "Oleg",
+      "last_name": "Kolpakov"
+    }]
+
+    If the request body does not contain required fields:
+    400 Bad Request
+    [{
+      "error": "Invalid data."
+    }]
+
+    If the user does not authorize:
+    401 Unauthorized
+    [{
+      "error": "Authorization required."
+    }]
+```
+
+- **Request PUT** __`users/{userId}`__ - Update user's properties.
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `user_id`  | string | Yes      | The user ID for change properties in necessary account. |
+| `last_name`  | string | Yes      | Change the last name from "Vakulenko" to "Kopytko". |
+
+**Response**: 
+Content-Type: application/json.
+
+```
+  200 OK success status response
+  [{
+    "message": "User account with ID {userID} has been updated successfully"
+  }]
+
+  400 Bad Request
+    [{
+    "error": "Invalid email address format"
+  }]
+```
+
+- **Request DELETE** __`users/{userId}`__ - Delete a user.
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `user_id`  | string | Yes      | The user ID to delete user's account. |
+
+**Response**: 
+Content-Type: application/json.
+
+```
+  204 No Content: if the record was found and deleted successfully
+  [{
+    "message": "User account with ID {userID} has been deleted successfully"
+  }]
+
+  400 Bad Request: if the userId parameter is invalid.
+  [{
+    "error": "Invalid user ID"
+  }]
+
+  404 Not Found: if the record with the given userId does not exist in the database.
+  [{
+    "error": "User ID does not exist"
+  }]
+
+```
+- **Request GET** __`/doctors`__ - Get all doctors.
+
+**Response**: 200 OK success status response.
+Content-Type: application/json.
+```
+   [
+   {
+      "id": "1",
+      "user_id": "Doctor",
+      "specialty": "Pulmonology",
+      "availability_day": "18.10.2023",
+      "availability_hours": "9.00 - 13.00"
+    },
+    {
+      "id": "3",
+      "user_id": "Doctor",
+      "specialty": "Cardiologist",
+      "availability_day": "18.10.2023",
+      "availability_hours": "9.00 - 13.00"
+    },
+    ...
+    ]
+```
+
+- **Request GET** __`/doctors/{specialty}`__ - filter doctors by specialty.
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `specialty`  | string | Yes      | Doctor's specialty. |
+
+
+**Response**: 
+Content-Type: application/json.
+
+```
+   
+    200 OK success status response
+    
+    [{
+      "id": "3",
+      "user_id": "Doctor",
+      "specialty": "Cardiologist",
+      "availability_day": "18.10.2023",
+      "availability_hours": "9.00 - 13.00",
+      "available": "true"
+    }]
+
+    404 Not Found
+    
+    [{
+      "error": "Specialty does not found."
+    }]
+```
+- **Request GET** __`/diseases{title}`__ - filter diseases by title.
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `title`  | string | Yes      | Disease title. |
+
+
+**Response**: 
+Content-Type: application/json.
+
+```
+    200 OK success status response
+    
+    [{
+      "id": "1",
+      "title": "pneumonia",
+      "specialty_id": "1",
+      "specialty_title": "Pulmonologist",
+    }]
+
+    404 Not Found
+    
+    [{
+      "error": "Disease does not found."
+    }]
+```
 
 ### Appointment endpoints
 
-- **GET** __`api/v1/appointments`__ - Retrieves a list of all appointments. (Requires JWT Authentication)
-- **GET** __`api/v1/appointments/:id`__ - Retrieves the details of a specific appointment. (Requires JWT Authentication)
-- **POST** __`api/v1/appointments`__ - Creates a new appointment. (Requires JWT Authentication)
-- **PUT** __`api/v1/appointments/:id`__ - Updates the details of a specific appointment. (Requires JWT Authentication)
-- **DELETE** __`api/v1/appointments/:id`__ - Deletes a specific appointment. (Requires JWT Authentication)
+- **Request GET** __`/appointments`__ - Retrieves a list of all appointments. (Requires JWT Authentication).
 
+**Response**: 200 OK success status response.
+Content-Type: application/json.
+```
+   [
+   {
+      "id": "2",
+      "patient_id": "1",
+      "doctor_id": "3",
+      "date": "20.10.2023",
+      "start: "9.00",
+      "end: "9.30"
+    },
+       {
+      "id": "2",
+      "patient_id": "1",
+      "doctor_id": "1",
+      "date": "20.10.2023",
+      "start: "9.30",
+      "end: "10.00"
+    },
+    ...
+    ]
+```
+
+- **Request GET** __`/appointments/{appointmentId}`__ - Retrieves the details of a specific appointment. (Requires JWT Authentication).
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `appointmentId`  | string | Yes      | The appointment ID. |
+
+
+**Response**: 
+Content-Type: application/json.
+
+```
+    If the record with id === appointmentId exists:
+
+    200 OK success status response
+    
+    [{
+      "id": "2",
+      "patient_id": "1",
+      "doctor_id": "1",
+      "date": "20.10.2023",
+      "start: "9.30",
+      "end: "10.00"
+    }]
+
+    If appointmentId is invalid (not uuid):
+
+    400 Bad Request
+
+    [{
+      "error": "Invalid appointment ID."
+    }]
+
+    If the record with id === appointmentId doesn't exist:
+
+   404 Not Found
+    
+    [{
+      "error": "Appointment does not found."
+    }]
+```
+
+- **Request POST** __`appointments`__ - Creates a new appointment (id will be added automatically). (Requires JWT Authentication).
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `patient_id`  | string | Yes      |  Patient ID. |
+| `doctor_id`  | string | Yes      | Doctor ID. |
+| `date`  | string | Yes      |  Appointment's date. |
+| `start`  | string | Yes      |  Time when appointment starts. |
+| `end`  | string | Yes      |  Time when appointment ends. |
+
+**Response**: 
+Content-Type: application/json.
+
+```
+    If the record was successfully created:
+    201 Created
+   [{
+      "id": "2",
+      "patient_id": "1",
+      "doctor_id": "1",
+      "date": "20.10.2023",
+      "start: "11.30",
+      "end: "12.00"
+    }]
+
+    If the request body does not contain required fields:
+    400 Bad Request
+    [{
+      "error": "Invalid data."
+    }]
+
+    If the user does not authorize:
+    401 Unauthorized
+    [{
+      "error": "Authorization required."
+    }]
+```
+
+- **Request PUT** __`appointments/{appointmentId}`__ - Updates the details of a specific appointment. (Requires JWT Authentication).
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `appointmentId`  | string | Yes      | The appointment ID for change settings. |
+| `date`  | string | Yes      | Change the date from "20.10.2023" to "21.10.2023". |
+
+**Response**: 
+Content-Type: application/json.
+
+```
+  200 OK success status response
+  [{
+    "message": "Appointment with ID {appointmentId} has been updated successfully"
+  }]
+
+  400 Bad Request
+    [{
+    "error": "Invalid date format"
+  }]
+
+     404 Not Found
+    
+    [{
+      "error": "This date does not found."
+    }]
+```
+
+- **Request DELETE** __`appointments/{appointmentId}`__ - Delete a specific appointment. (Requires JWT Authentication).
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `appointmentId`  | string | Yes      | The appointment ID to delete this appointment. |
+
+**Response**: 
+Content-Type: application/json.
+
+```
+  204 No Content: if the record was found and deleted successfully
+  [{
+    "message": "Appointment with ID {appointmentID} has been deleted successfully"
+  }]
+
+  400 Bad Request: if the appointmentId parameter is invalid.
+  [{
+    "error": "Invalid appointment ID"
+  }]
+
+  404 Not Found: if the record with the given appointmentId does not exist in the database.
+  [{
+    "error": "Appointment ID does not exist"
+  }]
+
+```
 
 ## Installation
 
@@ -112,5 +479,3 @@ Stop App
 ```
 docker compose down
 ```
-
-[⬆ Go Up ⬆](#go-up)
