@@ -6,8 +6,7 @@
 2. [Technologies](#technologies)
 3. [Implementation details](#implementation-details)
 4. [Endpoints & Routes](#endpoints--routes)
-     - [User endpoints](#user-endpoints)
-     - [Specialty endpoints](#specialty-endpoints)
+     - [User routes](#user-routes)
      - [Disease endpoints](#disease-endpoints)
      - [Appointment endpoints](#appointment-endpoints)
      - [Verification endpoints](#verification-endpoints)
@@ -36,7 +35,7 @@ This API follows a RESTful principles, providing endpoints for the standard CRUD
 
 ## Endpoints & Routes
 
-### User endpoints
+### User routes
 
 - **Request GET** __`/users`__ - Get all users (for Admin).
 
@@ -46,45 +45,25 @@ Content-Type: application/json.
    [
     {
       "user_id": "1",
-      "role": "Admin",
+      "role_type": "Admin",
       "email": "admin@gmail.com",
       "first_name": Admin",
       "last_name: "Admin",
     },
     {
       "user_id": "2",
-      "role": "Doctor",
+      "role_type": "Doctor",
       "email": "olena@gmail.com",
       "first_name": "Olena",
       "last_name: "Vakulenko",
-      "specialty_id": "Pulmonology",
-      "working hours": "{"Mon": "{ open: 9, close: 11 }", "Tue": "{ open: 11, close: 13 }", "Wed": "{ open: 9, close: 11 }", "Thu": "{ open: 11, close: 13 }", "Fri": "{ open: 13, close: 17 }", "Sat": "{ open: 9, close: 11 }", "Sun": "{ open: 11, close: 13 }"}",
+
     },
     {
       "user_id": "3",
-      "role": "Patient",
+      "role_type": "Patient",
       "email": "Ivana@gmail.com",
       "first_name": Ivan",
       "last_name: "Vakulenko",
-    },
-    ...
-    ]
-```
-
-- **Request GET** __`/users{role='Doctor'}`__ - Get all doctors.
-
-**Response**: 200 OK success status response.
-Content-Type: application/json.
-```
-   [
-   {
-      "user_id": "2",
-      "role": "Doctor",
-      "email": "olena@gmail.com",
-      "first_name": "Olena",
-      "last_name: "Vakulenko",
-      "specialty_id": "Pulmonology",
-      "working hours": "{"Mon": "{ open: 9, close: 11 }", "Tue": "{ open: 11, close: 13 }", "Wed": "{ open: 9, close: 11 }", "Thu": "{ open: 11, close: 13 }", "Fri": "{ open: 13, close: 17 }", "Sat": "{ open: 9, close: 11 }", "Sun": "{ open: 11, close: 13 }"}",
     },
     ...
     ]
@@ -109,12 +88,10 @@ Content-Type: application/json.
     
     [{
       "user_id": "{user_Id}",
-      "role": "Doctor",
+      "role_type": "Doctor",
       "email": "olena@gmail.com",
       "first_name": "Olena",
       "last_name: "Vakulenko",
-      "specialty_id": "Pulmonology",
-      "working hours": "{"Mon": "{ open: 9, close: 11 }", "Tue": "{ open: 11, close: 13 }", "Wed": "{ open: 9, close: 11 }", "Thu": "{ open: 11, close: 13 }", "Fri": "{ open: 13, close: 17 }", "Sat": "{ open: 9, close: 11 }", "Sun": "{ open: 11, close: 13 }"}",
     }]
 
     If user_Id is invalid (not uuid):
@@ -140,12 +117,10 @@ Content-Type: application/json.
 
 | Parameter | Type   | Required | Description  |
 |-----------|--------|----------|--------------|
-| `role`  | string | Yes      |  User's role ('Doctor', 'Patient' or 'Admin'). |
+| `role_type`  | string | Yes      |  User's role ('Doctor', 'Patient' or 'Admin'). |
 | `email`  | string | Yes      |  User's email. |
 | `first_name`  | string | Yes      | User's first name. |
 | `last_name`  | string | Yes      |  User's last name. |
-| `specialty_id`  | string | Yes      |  Doctor's specialty (for Doctor's role). |
-| `working hours`  | string | Yes      |  Doctor's availability (for Doctor's role). |
 
 **Response**: 
 Content-Type: application/json.
@@ -155,12 +130,10 @@ Content-Type: application/json.
     201 Created
     [{
       "user_id": "4",
-      role: "Doctor",
+      "role_type": "Doctor",
       "email": "kolpakov@gmail.com",
       "first_name": "Oleg",
       "last_name": "Kolpakov",
-      "specialty_id": "Cardiology",
-      "working hours": "{"Mon": "{ open: 9, close: 13 }", "Tue": "{ open: 13, close: 17 }", "Wed": "{ open: 9, close: 13 }", "Thu": "{ open: 13, close: 17 }", "Fri": "{ open: 9, close: 13 }", "Sat": "{ open: 13, close: 17 }", "Sun": "{ open: 11, close: 14 }"}"
     }]
 
     If the request body does not contain required fields:
@@ -229,9 +202,68 @@ Content-Type: application/json.
 
 ```
 
-### Specialty endpoints
+## Doctor endpoints
 
-- **Request GET** __`/specialties{specialty_title}`__ - filter doctors by specialty.
+- **Request GET** __`/users/doctors`__ - Get all doctors.
+
+**Response**: 200 OK success status response.
+Content-Type: application/json.
+```
+   [
+   {
+      "doctor_id": "1",
+      "user_id": "2",
+      "specialty_title": "Pulmonology",
+      "working_hours": "{"Mon": "{ open: 9, close: 11 }", "Tue": "{ open: 11, close: 13 }", "Wed": "{ open: 9, close: 11 }", "Thu": "{ open: 11, close: 13 }", "Fri": "{ open: 13, close: 17 }", "Sat": "{ open: 9, close: 11 }", "Sun": "{ open: 11, close: 13 }"}",
+      "availability": "true"
+    },
+    ...
+    ]
+```
+- **Request GET** __`/users/doctors/{doctor_id}`__ - Get a doctor by ID.
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `doctor_id`  | string | Yes      | The doctor ID. |
+
+
+**Response**: 
+Content-Type: application/json.
+
+```
+    If the record with id === doctor_Id exists:
+
+    200 OK success status response
+    
+    [{
+      "doctor_id": "{doctor_id}",
+      "user_id": "2",
+      "specialty_title": "Pulmonology",
+      "working_hours": "{"Mon": "{ open: 9, close: 11 }", "Tue": "{ open: 11, close: 13 }", "Wed": "{ open: 9, close: 11 }", "Thu": "{ open: 11, close: 13 }", "Fri": "{ open: 13, close: 17 }", "Sat": "{ open: 9, close: 11 }", "Sun": "{ open: 11, close: 13 }"}",
+      "availability": "true"
+    }]
+
+    If doctor_id is invalid (not uuid):
+
+    400 Bad Request
+
+    [{
+      "error": "Invalid doctor ID."
+    }]
+
+    If the record with id === doctor_id doesn't exist:
+
+   404 Not Found
+    
+    [{
+      "error": "Doctor not found."
+    }]
+```
+
+
+- **Request GET** __`/users/doctors/{specialty_title}`__ - filter doctors by specialty.
 
 **Query Parameters**
 
@@ -247,12 +279,11 @@ Content-Type: application/json.
     200 OK success status response
     
     [{
-      "specialty_id": "2",
-      "specialty_title": "Cardiology",
-      "user_id {"role": "Doctor"}": "4", 
-      "first_name": "Oleg",
-      "last_name": "Kolpakov",  
-      "disease_id": "2"
+      "doctor_id": "{1}",
+      "user_id": "2",
+      "specialty_title": "Pulmonology",
+      "working_hours": "{"Mon": "{ open: 9, close: 11 }", "Tue": "{ open: 11, close: 13 }", "Wed": "{ open: 9, close: 11 }", "Thu": "{ open: 11, close: 13 }", "Fri": "{ open: 13, close: 17 }", "Sat": "{ open: 9, close: 11 }", "Sun": "{ open: 11, close: 13 }"}",
+      "availability": "true"
     }]
 
     404 Not Found
@@ -260,6 +291,239 @@ Content-Type: application/json.
     [{
       "error": "Specialty does not found."
     }]
+```
+
+- **Request POST** __`/users/doctors`__ - create a new doctor (id will be added automatically) (Requires JWT Authentication).
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `user_id`  | string | Yes      |  User ID. |
+| `specialty_title`  | string | Yes      |  Specialty's title. |
+| `working_hours`  | string | Yes      | Doctor's working hours. |
+| `availability`  | boolean | Yes      |  Doctor's availability. |
+
+**Response**: 
+Content-Type: application/json.
+
+```
+    If the record was successfully created:
+    201 Created
+    [{
+      "doctor_id": "2"
+      "user_id": "4",
+      "specialty_title": "Cardiology",
+      "working_hours": "{"Mon": "{ open: 9, close: 13 }", "Tue": "{ open: 13, close: 17 }", "Wed": "{ open: 9, close: 13 }", "Thu": "{ open: 13, close: 17 }", "Fri": "     { open: 9, close: 13 }", "Sat": "{ open: 13, close: 17 }", "Sun": "{ open: 11, close: 14 }"}",
+      "availability": "true"
+    }]
+
+    If the request body does not contain required fields:
+    400 Bad Request
+    [{
+      "error": "Invalid data."
+    }]
+
+    If the user does not authorize:
+    401 Unauthorized
+    [{
+      "error": "Authorization required."
+    }]
+```
+
+- **Request PATCH** __`/users/doctors/{doctor_id}`__ - Update doctor's properties (Requires JWT Authentication).
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `doctor_id`  | string | Yes      | The doctor ID for change properties in necessary account. |
+| `specialty_title`  | string | Yes      | Change the specialty from "pulmonology" to "internal medicine". |
+
+**Response**: 
+Content-Type: application/json.
+
+```
+  200 OK success status response
+  [{
+    "message": "Doctor account with ID {doctor_id} has been updated successfully"
+  }]
+
+  400 Bad Request
+    [{
+    "error": "Invalid specialty title format"
+  }]
+```
+
+- **Request DELETE** __`/users/doctors/{doctor_Id}`__ - Delete a doctor (for Admin).
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `doctor_id`  | string | Yes      | The doctor ID to delete doctor's account. |
+
+**Response**: 
+Content-Type: application/json.
+
+```
+  204 No Content: if the record was found and deleted successfully
+  [{
+    "message": "Doctor account with ID {doctor_id} has been deleted successfully"
+  }]
+
+  400 Bad Request: if the doctor_id parameter is invalid.
+  [{
+    "error": "Invalid doctor ID"
+  }]
+
+  404 Not Found: if the record with the given udoctor_id does not exist in the database.
+  [{
+    "error": "Doctor ID does not exist"
+  }]
+
+```
+## Patient endpoints
+
+- **Request GET** __`/users/patients`__ - Get all patients (for Admin).
+
+**Response**: 200 OK success status response.
+Content-Type: application/json.
+```
+   [
+    {
+      "patient_id": "1",
+      "user_id": "3",
+      "disease_id": "1",
+    },
+    ...
+    ]
+```
+- **Request GET** __`/users/patients/{patient_id}`__ - Get a patient by ID (for Doctor and Admin).
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `patient_id`  | string | Yes      | The patient ID. |
+
+
+**Response**: 
+Content-Type: application/json.
+
+```
+    If the record with id === patient_id exists:
+
+    200 OK success status response
+    
+    [{
+      "patient_id": "{patient_id}",
+      "user_id": "3",
+      "info": "cough, fever, high blood pressure",
+    }]
+
+    If patient_id is invalid (not uuid):
+
+    400 Bad Request
+
+    [{
+      "error": "Invalid patient ID."
+    }]
+
+    If the record with id === patient_id doesn't exist:
+
+   404 Not Found
+    
+    [{
+      "error": "Patient not found."
+    }]
+```
+
+- **Request POST** __`/users/patients`__ - create a new patient (id will be added automatically) (Requires JWT Authentication).
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `user_id`  | string | Yes      |  User ID. |
+| `info`  | string | Yes      |  Information about the patient. |
+
+**Response**: 
+Content-Type: application/json.
+
+```
+    If the record was successfully created:
+    201 Created
+    [{
+      "patient_id": "2",
+      "user_id": "6",
+      "info": "high blood pressure",
+    }]
+
+    If the request body does not contain required fields:
+    400 Bad Request
+    [{
+      "error": "Invalid data."
+    }]
+
+    If the user does not authorize:
+    401 Unauthorized
+    [{
+      "error": "Authorization required."
+    }]
+```
+
+- **Request PATCH** __`/users/patients/{patient_id}`__ - Update patient's properties (Requires JWT Authentication).
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `patient_id`  | string | Yes      | The patient ID for change properties in necessary account. |
+| `info`  | string | Yes      | Change the info from "high blood pressure" to "chest pain and high blood pressure". |
+
+**Response**: 
+Content-Type: application/json.
+
+```
+  200 OK success status response
+  [{
+    "message": "Patient account with ID {patient_id} has been updated successfully"
+  }]
+
+  400 Bad Request
+    [{
+    "error": "Invalid specialty title format"
+  }]
+```
+
+- **Request DELETE** __`/users/patients/{patient_id}`__ - Delete a patient (for Admin).
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `patient_id`  | string | Yes      | The patient ID to delete patient's account. |
+
+**Response**: 
+Content-Type: application/json.
+
+```
+  204 No Content: if the record was found and deleted successfully
+  [{
+    "message": "Doctor account with ID {patient_id} has been deleted successfully"
+  }]
+
+  400 Bad Request: if the patient_id parameter is invalid.
+  [{
+    "error": "Invalid patient ID"
+  }]
+
+  404 Not Found: if the record with the given patient_id does not exist in the database.
+  [{
+    "error": "Patient ID does not exist"
+  }]
+
 ```
 
 ### Disease endpoints
@@ -273,13 +537,11 @@ Content-Type: application/json.
    {
       "disease_id": "1",
       "disease_title": "pneumonia",
-      "specialty_id": "1",
       "specialty_title": "Pulmonology",
     },
      {
       "disease_id": "2",
       "disease_title": "hypertension",
-      "specialty_id": "2",
       "specialty_title": "Cardiology",
     },
     ...
@@ -306,7 +568,6 @@ Content-Type: application/json.
     [{
       "disease_id": "{disease_id}",
       "disease_title": "pneumonia",
-      "specialty_id": "1",
       "specialty_title": "Pulmonology"
     }]
 
@@ -334,7 +595,6 @@ Content-Type: application/json.
 | Parameter | Type   | Required | Description  |
 |-----------|--------|----------|--------------|
 | `disease_title`  | string | Yes      |  The disease title. |
-| `specialty_id`  | string | Yes      |  Doctor's specialty who can treat this disease. |
 | `specialty_title`  | string | Yes      |  Doctor's specialty. |
 
 **Response**: 
@@ -346,7 +606,6 @@ Content-Type: application/json.
     [{
       "disease_id": "2",
       "disease_title": COPD",
-      "specialty_id": "1",
       "specialty_title": "Pulmonology"
     }]
 
@@ -363,7 +622,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request PATCH** __`/diseases/{disease_id}`__ - Update disease's properties.
+- **Request PATCH** __`/diseases/{disease_id}`__ - Update disease's properties (for Admin).
 
 **Query Parameters**
 
@@ -387,7 +646,7 @@ Content-Type: application/json.
   }]
 ```
 
-- **Request DELETE** __`/diseases/{disease_id}`__ - Delete a disease.
+- **Request DELETE** __`/diseases/{disease_id}`__ - Delete a disease (for Admin).
 
 **Query Parameters**
 
@@ -426,16 +685,18 @@ Content-Type: application/json.
    [
    {
       "appointment_id": "2",
-      "user_id {"role": "Patient"}": "3",
-      "user_id {"role": "Doctor"}": "2",
+      "patient_id": "3",
+      "doctor_id": "2",
+      "status": "approved",
       "date": "20.10.2023",
       "start: "9.00",
       "end: "9.30"
     },
        {
       "appointment_id": "2",
-      "user_id {"role": "Patient"}": "3",
-      "user_id {"role": "Doctor"}": "4",
+      "patient_id": "3",
+      "doctor_id": "4",
+      "status": "approved",
       "date": "20.10.2023",
       "start: "9.30",
       "end: "10.00"
@@ -462,12 +723,13 @@ Content-Type: application/json.
     200 OK success status response
     
     [{
-      "id": "2",
-      "user_id {"role": "Patient"}": "3",
-      "user_id {"role": "Doctor"}": "2",
+      "appointment_id": "2",
+      "patient_id": "3",
+      "doctor_id": "2",
+      "status": "approved",
       "date": "20.10.2023",
-      "start: "9.30",
-      "end: "10.00"
+      "start: "9.00",
+      "end: "9.30"
     }]
 
     If appointment_Id is invalid (not uuid):
@@ -493,8 +755,9 @@ Content-Type: application/json.
 
 | Parameter | Type   | Required | Description  |
 |-----------|--------|----------|--------------|
-| `user_id {"role": "Patient"}`  | string | Yes      |  Patient ID. |
-| `user_id {"role": "Doctor"}`  | string | Yes      | Doctor ID. |
+| `patient_id`  | string | Yes      |  Patient ID. |
+| `doctor_id`  | string | Yes      | Doctor ID. |
+| `status`  | string | Yes      | The appointment status. |
 | `date`  | string | Yes      |  Appointment's date. |
 | `start`  | string | Yes      |  Time when appointment starts. |
 | `end`  | string | Yes      |  Time when appointment ends. |
@@ -507,8 +770,9 @@ Content-Type: application/json.
     201 Created
    [{
       "appointment_id": "2",
-      "user_id {"role": "Patient"}": "3",
-      "user_id {"role": "Doctor"}": "4",
+      "patient_id": "3",
+      "doctor_id": "4",
+      "status": "approved",
       "date": "20.10.2023",
       "start: "11.30",
       "end: "12.00"
@@ -527,7 +791,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request PUT** __`appointments/{appointment_Id}`__ - Updates the details of a specific appointment. (Requires JWT Authentication).
+- **Request PATCH** __`appointments/{appointment_Id}`__ - Updates the details of a specific appointment. (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -595,17 +859,17 @@ Content-Type: application/json.
    [
    {
       "verification_id": "1",
-      "user_id {"role": "Doctor"}": "2",
-      "user_id {"role": "Admin"}": "1",
-      "status": "approved",
+      "licence_id": "1",
+      "admin_id": "1",
+      "status": "verified",
       "date: "19.10.2023",
       "notes": "licence from 01.11.2016",
     },
    {
       "verification_id": "2",
-      "user_id {"role": "Doctor"}": "4",
-      "user_id {"role": "Admin"}": "1",
-      "status": "approved",
+      "licence_id": "2",
+      "admin_id": "1",
+      "status": "verified",
       "date: "19.10.2023",
       "notes": "licence from 17.07.2014",
     },
@@ -632,9 +896,9 @@ Content-Type: application/json.
     
     [{
       "verification_id": "{verification_id}",
-      "user_id {"role": "Doctor"}": "2",
-      "user_id {"role": "Admin"}": "1",
-      "status": "approved",
+      "licence_id": "1",
+      "admin_id": "1",
+      "status": "verified",
       "date: "19.10.2023",
       "notes": "licence from 01.11.2016"
     }]
@@ -662,8 +926,8 @@ Content-Type: application/json.
 
 | Parameter | Type   | Required | Description  |
 |-----------|--------|----------|--------------|
-| `user_id {"role": "Doctor"}`  | string | Yes      | Doctor ID. |
-| `user_id {"role": "Admin"}`  | string | Yes      | Admin ID. |
+| `licence_id`  | string | Yes      | Doctor ID. |
+| `admin_id`  | string | Yes      | Admin ID. |
 | `Status`  | string | Yes      |  Approvement status. |
 | `Date`  | string | Yes      | Date when an Admin create this verification. |
 | `Notes`  | string | Yes      |  Additional info about verification. |
@@ -676,11 +940,11 @@ Content-Type: application/json.
     201 Created
     [{
       "verification_id": "3",
-      "user_id {"role": "Doctor"}": "5",
-      "user_id {"role": "Admin"}": "1",
-      "status": "not approved",
+      "licence_id": "3",
+      "admin_id": "1",
+      "status": "processing",
       "date: "19.10.2023",
-      "notes": "the data to verify is not enough: licence: {false}"
+      "notes": "the data to verify is not enough"
     }]
 
     If the request body does not contain required fields:
@@ -703,7 +967,7 @@ Content-Type: application/json.
 | Parameter | Type   | Required | Description  |
 |-----------|--------|----------|--------------|
 | `verification_id`  | string | Yes      | The verification ID for change properties in necessary entity. |
-| `notes`  | string | Yes      | Change the notes from "the data to verify is not enough: licence: {false}" to "licence from 15.09.2023". |
+| `notes`  | string | Yes      | Change the notes from "the data to verify is not enough" to "licence from 15.09.2023". |
 
 **Response**: 
 Content-Type: application/json.
@@ -759,17 +1023,15 @@ Content-Type: application/json.
    [
    {
       "review_id": "1",
-      "user_id {"role": "Doctor"}": "2",
-      "user_id {"role": "Patient"}": "3",
       "appointment_id": "1",
+      "creator": "Patient",
       "rate": "5 stars",
       "message": "Olena Kopytko in five days managed my pneumonia! exellent Doctor",
     },
     {
       "review_id": "2",
-      "user_id {"role": "Doctor"}": "4",
-      "user_id {"role": "Patient"}": "3",
       "appointment_id": "2",
+      "creator": "Patient",
       "rate": "3 stars",
       "message": "Unfortunately, my blood pressure remains uncontrolled. Despite the fact that the doctor was kind to me.",
     },
@@ -796,8 +1058,7 @@ Content-Type: application/json.
     
     [{
       "review_id": "{review_id}",
-      "user_id {"role": "Doctor"}": "2",
-      "user_id {"role": "Patient"}": "3",
+      "creator": "Patient",
       "appointment_id": "1",
       "rate": "5 stars",
       "message": "Olena Kopytko in five days managed my pneumonia! exellent Doctor"
@@ -826,8 +1087,7 @@ Content-Type: application/json.
 
 | Parameter | Type   | Required | Description  |
 |-----------|--------|----------|--------------|
-| `user_id {"role": "Doctor"}`  | string | Yes      | Doctor ID. |
-| `user_id {"role": "Patient"}`  | string | Yes      | Patient ID. |
+| `creator`  | string | Yes      | Review's creator. |
 | `appointment_id`  | string | Yes      | Appointment ID. |
 | `rate`  | string | Yes      |  Appointment's rate. |
 | `message`  | string | Yes      |  Review message. |
@@ -840,9 +1100,8 @@ Content-Type: application/json.
     201 Created
     [{
       "review_id": "3",
-      "user_id {"role": "Doctor"}": "4",
-      "user_id {"role": "Patient"}": "3",
       "appointment_id": "3",
+      "creator": "Patient",
       "rate": "5 stars",
       "message": "I am satisfied with the results"
     }]
@@ -867,7 +1126,7 @@ Content-Type: application/json.
 | Parameter | Type   | Required | Description  |
 |-----------|--------|----------|--------------|
 | `review_id`  | string | Yes      | The user ID for change properties in necessary account. |
-| `user_id {"role": "Doctor"}`  | string | Yes      | Change the user ID name from "4" to "2". |
+| `creator`  | string | Yes      | Change the creator from "Patient" to ""Admin". |
 
 **Response**: 
 Content-Type: application/json.
@@ -923,12 +1182,10 @@ Content-Type: application/json.
    [
    {
       "conflict_id": "1",
-      "user_id {"role": "Admin"}": "1",
-      "user_id {"role": "Doctor"}": "4",
-      "user_id {"role": "Patient"}": "3",
+      "admin_id": "1",
       "appointment_id: 2",
       "reason": "bad treatment results",
-      "status": "closed",
+      "status": "fulfilled",
    },
     ...
     ]
@@ -954,12 +1211,10 @@ Content-Type: application/json.
     
     [{
       "conflict_id": "1",
-      "user_id {"role": "Admin"}": "1",
-      "user_id {"role": "Doctor"}": "4",
-      "user_id {"role": "Patient"}": "3",
+      "admin_id": "1",
       "appointment_id: 2",
       "reason": "bad treatment results",
-      "status": "closed"
+      "status": "fulfilled",
     }]
 
     If conflict_id is invalid (not uuid):
@@ -985,9 +1240,7 @@ Content-Type: application/json.
 
 | Parameter | Type   | Required | Description  |
 |-----------|--------|----------|--------------|
-| `user_id {"role": "Admin"}`  | string | Yes      |  Admin ID. |
-| `user_id {"role": "Doctor"}`  | string | Yes      |  Doctor ID. |
-| `user_id {"role": "Patient"}`  | string | Yes      | Patient ID. |
+| `admin_id`  | string | Yes      |  Admin ID. |
 | `appointment_id`  | string | Yes      |  Appointment ID. |
 | `reason`  | string | Yes      |  The reason of the conflict. |
 | `stasus`  | string | Yes      |  Conflict's status. |
@@ -1000,12 +1253,10 @@ Content-Type: application/json.
     201 Created
     [{
       "conflict_id": "2",
-      "user_id {"role": "Admin"}": "1",
-      "user_id {"role": "Doctor"}": "5",
-      "user_id {"role": "Patient"}": "3",
+      "admin_id": "1",
       "appointment_id: 4",
       "reason": "My appointment was cancelled",
-      "status": "open"
+      "status": "processing",
     }]
 
     If the request body does not contain required fields:
@@ -1028,7 +1279,7 @@ Content-Type: application/json.
 | Parameter | Type   | Required | Description  |
 |-----------|--------|----------|--------------|
 | `conflict_id`  | string | Yes      | The user ID for change properties in necessary account. |
-| `user_id {"role": "Doctor"}`  | string | Yes      | Change the user ID name from "5" to "2". |
+| `appointment_id`  | string | Yes      | Change the appointment ID  from "3" to "2". |
 
 **Response**: 
 Content-Type: application/json.
