@@ -1520,4 +1520,4 @@ docker compose down
 
 ## Database schema
 
-![db-schema](<db schema.png>)
+![db-schema](https://github.com/AnastasiiaYaM/HospitalAppointmentAPI/blob/main/db%20schema.png)
