@@ -14,6 +14,8 @@
      - [Conflict endpoints](#conflict-endpoints)
 5. [Installation](#installation)
 6. [Dockerization](#dockerization)
+7. [Database schema](#database-schema)
+
 
 ## Description
 
@@ -37,7 +39,7 @@ This API follows a RESTful principles, providing endpoints for the standard CRUD
 
 ### User routes
 
-- **Request GET** __`/users`__ - Get all users (for Admin).
+- **Request GET** __`/users`__ - Get all users.
 
 **Response**: 200 OK success status response.
 Content-Type: application/json.
@@ -213,6 +215,7 @@ Content-Type: application/json.
    {
       "doctor_id": "1",
       "user_id": "2",
+      "licence": "XX-12345-XX",
       "specialty_title": "Pulmonology",
       "working_hours": "{"Mon": "{ open: 9, close: 11 }", "Tue": "{ open: 11, close: 13 }", "Wed": "{ open: 9, close: 11 }", "Thu": "{ open: 11, close: 13 }", "Fri": "{ open: 13, close: 17 }", "Sat": "{ open: 9, close: 11 }", "Sun": "{ open: 11, close: 13 }"}",
       "availability": "true"
@@ -240,6 +243,7 @@ Content-Type: application/json.
     [{
       "doctor_id": "{doctor_id}",
       "user_id": "2",
+      "licence": "XX-12345-XX",
       "specialty_title": "Pulmonology",
       "working_hours": "{"Mon": "{ open: 9, close: 11 }", "Tue": "{ open: 11, close: 13 }", "Wed": "{ open: 9, close: 11 }", "Thu": "{ open: 11, close: 13 }", "Fri": "{ open: 13, close: 17 }", "Sat": "{ open: 9, close: 11 }", "Sun": "{ open: 11, close: 13 }"}",
       "availability": "true"
@@ -281,6 +285,7 @@ Content-Type: application/json.
     [{
       "doctor_id": "{1}",
       "user_id": "2",
+      "licence": "XX-12345-XX",
       "specialty_title": "Pulmonology",
       "working_hours": "{"Mon": "{ open: 9, close: 11 }", "Tue": "{ open: 11, close: 13 }", "Wed": "{ open: 9, close: 11 }", "Thu": "{ open: 11, close: 13 }", "Fri": "{ open: 13, close: 17 }", "Sat": "{ open: 9, close: 11 }", "Sun": "{ open: 11, close: 13 }"}",
       "availability": "true"
@@ -313,6 +318,7 @@ Content-Type: application/json.
     [{
       "doctor_id": "2"
       "user_id": "4",
+      "licence": "XX-67891-XX",
       "specialty_title": "Cardiology",
       "working_hours": "{"Mon": "{ open: 9, close: 13 }", "Tue": "{ open: 13, close: 17 }", "Wed": "{ open: 9, close: 13 }", "Thu": "{ open: 13, close: 17 }", "Fri": "     { open: 9, close: 13 }", "Sat": "{ open: 13, close: 17 }", "Sun": "{ open: 11, close: 14 }"}",
       "availability": "true"
@@ -355,7 +361,7 @@ Content-Type: application/json.
   }]
 ```
 
-- **Request DELETE** __`/users/doctors/{doctor_Id}`__ - Delete a doctor (for Admin).
+- **Request DELETE** __`/users/doctors/{doctor_Id}`__ - Delete a doctor (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -385,7 +391,7 @@ Content-Type: application/json.
 ```
 ## Patient endpoints
 
-- **Request GET** __`/users/patients`__ - Get all patients (for Admin).
+- **Request GET** __`/users/patients`__ - Get all patients (Requires JWT Authentication).
 
 **Response**: 200 OK success status response.
 Content-Type: application/json.
@@ -395,11 +401,13 @@ Content-Type: application/json.
       "patient_id": "1",
       "user_id": "3",
       "disease_id": "1",
+      "disease_id": "2",
+      "info": "cough, fever, high blood pressure",
     },
     ...
     ]
 ```
-- **Request GET** __`/users/patients/{patient_id}`__ - Get a patient by ID (for Doctor and Admin).
+- **Request GET** __`/users/patients/{patient_id}`__ - Get a patient by ID (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -419,6 +427,8 @@ Content-Type: application/json.
     [{
       "patient_id": "{patient_id}",
       "user_id": "3",
+      "disease_id": "1",
+      "disease_id": "2",
       "info": "cough, fever, high blood pressure",
     }]
 
@@ -446,6 +456,7 @@ Content-Type: application/json.
 | Parameter | Type   | Required | Description  |
 |-----------|--------|----------|--------------|
 | `user_id`  | string | Yes      |  User ID. |
+| `disease_id`  | string | Yes      |  Disease ID. |
 | `info`  | string | Yes      |  Information about the patient. |
 
 **Response**: 
@@ -457,6 +468,7 @@ Content-Type: application/json.
     [{
       "patient_id": "2",
       "user_id": "6",
+      "disease_id": "2",
       "info": "high blood pressure",
     }]
 
@@ -497,7 +509,7 @@ Content-Type: application/json.
   }]
 ```
 
-- **Request DELETE** __`/users/patients/{patient_id}`__ - Delete a patient (for Admin).
+- **Request DELETE** __`/users/patients/{patient_id}`__ - Delete a patient (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -511,7 +523,7 @@ Content-Type: application/json.
 ```
   204 No Content: if the record was found and deleted successfully
   [{
-    "message": "Doctor account with ID {patient_id} has been deleted successfully"
+    "message": "Patient account with ID {patient_id} has been deleted successfully"
   }]
 
   400 Bad Request: if the patient_id parameter is invalid.
@@ -522,6 +534,149 @@ Content-Type: application/json.
   404 Not Found: if the record with the given patient_id does not exist in the database.
   [{
     "error": "Patient ID does not exist"
+  }]
+
+```
+
+## Admin endpoints
+
+- **Request GET** __`/users/admins`__ - Get all admins (Requires JWT Authentication).
+
+**Response**: 200 OK success status response.
+Content-Type: application/json.
+```
+   [
+    {
+      "admin_id": "1",
+      "user_id": "1",
+      "is_active": "true"
+    },
+    ...
+    ]
+```
+- **Request GET** __`/users/admins/{admin_id}`__ - Get an admin by ID (Requires JWT Authentication).
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `admin_id`  | string | Yes      | The admin ID. |
+
+
+**Response**: 
+Content-Type: application/json.
+
+```
+    If the record with id === admin_id exists:
+
+    200 OK success status response
+    
+    [{
+      "admin_id": "1",
+      "user_id": "1",
+      "is_active": "true"
+    }]
+
+    If admin_id is invalid (not uuid):
+
+    400 Bad Request
+
+    [{
+      "error": "Invalid admin ID."
+    }]
+
+    If the record with id === admin_id doesn't exist:
+
+   404 Not Found
+    
+    [{
+      "error": "Admin not found."
+    }]
+```
+
+- **Request POST** __`/users/admins`__ - create a new admin (id will be added automatically) (Requires JWT Authentication).
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `user_id`  | string | Yes      |  User ID. |
+| `is_active`  | boolean | Yes      |  Information about the admin's current state. |
+
+**Response**: 
+Content-Type: application/json.
+
+```
+    If the record was successfully created:
+    201 Created
+    [{
+      "admin_id": "2",
+      "user_id": "7",
+      "is_active": "false"
+    }]
+
+    If the request body does not contain required fields:
+    400 Bad Request
+    [{
+      "error": "Invalid data."
+    }]
+
+    If the user does not authorize:
+    401 Unauthorized
+    [{
+      "error": "Authorization required."
+    }]
+```
+
+- **Request PATCH** __`/users/admins/{admin_id}`__ - Update admin's properties (Requires JWT Authentication).
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `admin_id`  | string | Yes      | The admin ID for change properties in necessary account. |
+| `is_active`  | boolean | Yes      | Change the info from "false" to "true". |
+
+**Response**: 
+Content-Type: application/json.
+
+```
+  200 OK success status response
+  [{
+    "message": "Admin account with ID {admin_id} has been updated successfully"
+  }]
+
+  400 Bad Request
+    [{
+    "error": "Invalid specialty title format"
+  }]
+```
+
+- **Request DELETE** __`/users/admins/{admin_id}`__ - Delete an admin (Requires JWT Authentication).
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `admin_id`  | string | Yes      | The admin ID to delete admin's account. |
+
+**Response**: 
+Content-Type: application/json.
+
+```
+  204 No Content: if the record was found and deleted successfully
+  [{
+    "message": "Admin account with ID {admin_id} has been deleted successfully"
+  }]
+
+  400 Bad Request: if the admin_id parameter is invalid.
+  [{
+    "error": "Invalid admin ID"
+  }]
+
+  404 Not Found: if the record with the given admin_id does not exist in the database.
+  [{
+    "error": "Admin ID does not exist"
   }]
 
 ```
@@ -588,7 +743,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request POST** __`diseases`__ - create a new disease (id will be added automatically) (for Admin).
+- **Request POST** __`diseases`__ - create a new disease (id will be added automatically) (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -615,14 +770,14 @@ Content-Type: application/json.
       "error": "Invalid data."
     }]
 
-    If the user does not authorize like Admin:
+    If the user does not authorize:
     401 Unauthorized
     [{
       "error": "Authorization required."
     }]
 ```
 
-- **Request PATCH** __`/diseases/{disease_id}`__ - Update disease's properties (for Admin).
+- **Request PATCH** __`/diseases/{disease_id}`__ - Update disease's properties (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -646,7 +801,7 @@ Content-Type: application/json.
   }]
 ```
 
-- **Request DELETE** __`/diseases/{disease_id}`__ - Delete a disease (for Admin).
+- **Request DELETE** __`/diseases/{disease_id}`__ - Delete a disease (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -851,7 +1006,7 @@ Content-Type: application/json.
 ```
 ### Verification endpoints
 
-- **Request GET** __`/verifications`__ - Get all verifications (for Admin).
+- **Request GET** __`/verifications`__ - Get all verifications (Requires JWT Authentication).
 
 **Response**: 200 OK success status response.
 Content-Type: application/json.
@@ -859,7 +1014,7 @@ Content-Type: application/json.
    [
    {
       "verification_id": "1",
-      "licence_id": "1",
+      "licence": "XX-12345-XX",
       "admin_id": "1",
       "status": "verified",
       "date: "19.10.2023",
@@ -867,7 +1022,7 @@ Content-Type: application/json.
     },
    {
       "verification_id": "2",
-      "licence_id": "2",
+      "licence": "XX-67891-XX",
       "admin_id": "1",
       "status": "verified",
       "date: "19.10.2023",
@@ -877,7 +1032,7 @@ Content-Type: application/json.
     ]
 ```
 
-- **Request GET** __`/verifications/{verification_id}`__ - Get a verification by ID (for Doctor and Admin).
+- **Request GET** __`/verifications/{verification_id}`__ - Get a verification by ID (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -896,7 +1051,7 @@ Content-Type: application/json.
     
     [{
       "verification_id": "{verification_id}",
-      "licence_id": "1",
+      "licence": "XX-12345-XX",
       "admin_id": "1",
       "status": "verified",
       "date: "19.10.2023",
@@ -920,13 +1075,13 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request POST** __`/verifications`__ - create a new verification_id (id will be added automatically) (for Admin).
+- **Request POST** __`/verifications`__ - create a new verification_id (id will be added automatically) (Requires JWT Authentication).
 
 **Query Parameters**
 
 | Parameter | Type   | Required | Description  |
 |-----------|--------|----------|--------------|
-| `licence_id`  | string | Yes      | Doctor ID. |
+| `licence`  | string | Yes      | Doctor's licence. |
 | `admin_id`  | string | Yes      | Admin ID. |
 | `Status`  | string | Yes      |  Approvement status. |
 | `Date`  | string | Yes      | Date when an Admin create this verification. |
@@ -940,7 +1095,7 @@ Content-Type: application/json.
     201 Created
     [{
       "verification_id": "3",
-      "licence_id": "3",
+      "licence": "XX-23456-XX",
       "admin_id": "1",
       "status": "processing",
       "date: "19.10.2023",
@@ -953,14 +1108,14 @@ Content-Type: application/json.
       "error": "Invalid data."
     }]
 
-    If the user does not authorize as Admin:
+    If the user does not authorize:
     401 Unauthorized
     [{
       "error": "Authorization required."
     }]
 ```
 
-- **Request PATCH** __`/verifications/{verification_id}`__ - Update verification's properties (for Admin).
+- **Request PATCH** __`/verifications/{verification_id}`__ - Update verification's properties (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -984,7 +1139,7 @@ Content-Type: application/json.
   }]
 ```
 
-- **Request DELETE** __`/verifications/{verification_id}`__ - Delete a verification.
+- **Request DELETE** __`/verifications/{verification_id}`__ - Delete a verification (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -1081,7 +1236,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request POST** __`/reviews`__ - create a new review (id will be added automatically) (for authorised user who has already had an appointment).
+- **Request POST** __`/reviews`__ - create a new review (id will be added automatically) (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -1174,7 +1329,7 @@ Content-Type: application/json.
 
 ### Conflict endpoints
 
-- **Request GET** __`/conflicts`__ - Get all conflicts (for Admin).
+- **Request GET** __`/conflicts`__ - Get all conflicts (Requires JWT Authentication).
 
 **Response**: 200 OK success status response.
 Content-Type: application/json.
@@ -1192,7 +1347,7 @@ Content-Type: application/json.
 ```
 
 
-- **Request GET** __`/conflicts/{conflict_id}`__ - Get a conflict by ID (for authorised user who has already had an appointment).
+- **Request GET** __`/conflicts/{conflict_id}`__ - Get a conflict by ID (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -1234,7 +1389,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request POST** __`/conflicts`__ - create a new conflict (id will be added automatically) (for authorised user who has already had an appointment).
+- **Request POST** __`/conflicts`__ - create a new conflict (id will be added automatically) (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -1272,7 +1427,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request PATCH** __`/conflicts/{conflict_id}`__ - Update conflict's enyity properties (for authorised user who has already had an appointment).
+- **Request PATCH** __`/conflicts/{conflict_id}`__ - Update conflict's enyity properties (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -1296,7 +1451,7 @@ Content-Type: application/json.
   }]
 ```
 
-- **Request DELETE** __`/conflicts/{conflict_id}`__ - Delete a conflict (for authorised user who has already had an appointment).
+- **Request DELETE** __`/conflicts/{conflict_id}`__ - Delete a conflict (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -1362,3 +1517,7 @@ Stop App
 ```
 docker compose down
 ```
+
+## Database schema
+
+![db-schema](<db schema.png>)
