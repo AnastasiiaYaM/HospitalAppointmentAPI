@@ -7,9 +7,12 @@
 3. [Implementation details](#implementation-details)
 4. [Endpoints & Routes](#endpoints--routes)
      - [User routes](#user-routes)
+        - [Doctor endpoints](#doctor-endpoints)
+        - [Patient endpoints](#patient-endpoints)
+        - [Admin endpoints](#admin-endpoints)
+     - [Specialty endpoints](#specialty-endpoints)
      - [Disease endpoints](#disease-endpoints)
      - [Appointment endpoints](#appointment-endpoints)
-     - [Verification endpoints](#verification-endpoints)
      - [Review endpoints](#review-endpoints)
      - [Conflict endpoints](#conflict-endpoints)
 5. [Installation](#installation)
@@ -26,7 +29,7 @@ This API is an Hospital Appointment Scheduler REST API built with Node.js, using
 - JavaScript
 - Node.js (Express Framework)
 - JSON Web Token (authentication)
-- MongoDB (Database)
+- MySQL (Database)
 - Docker container
 
 ## Implementation details
@@ -215,8 +218,7 @@ Content-Type: application/json.
    {
       "doctor_id": "1",
       "user_id": "2",
-      "licence": "XX-12345-XX",
-      "specialty_title": "Pulmonology",
+      "specialty_id": "1",
       "working_hours": "{"Mon": "{ open: 9, close: 11 }", "Tue": "{ open: 11, close: 13 }", "Wed": "{ open: 9, close: 11 }", "Thu": "{ open: 11, close: 13 }", "Fri": "{ open: 13, close: 17 }", "Sat": "{ open: 9, close: 11 }", "Sun": "{ open: 11, close: 13 }"}",
       "availability": "true"
     },
@@ -243,8 +245,7 @@ Content-Type: application/json.
     [{
       "doctor_id": "{doctor_id}",
       "user_id": "2",
-      "licence": "XX-12345-XX",
-      "specialty_title": "Pulmonology",
+      "specialty_id": "1",
       "working_hours": "{"Mon": "{ open: 9, close: 11 }", "Tue": "{ open: 11, close: 13 }", "Wed": "{ open: 9, close: 11 }", "Thu": "{ open: 11, close: 13 }", "Fri": "{ open: 13, close: 17 }", "Sat": "{ open: 9, close: 11 }", "Sun": "{ open: 11, close: 13 }"}",
       "availability": "true"
     }]
@@ -267,13 +268,13 @@ Content-Type: application/json.
 ```
 
 
-- **Request GET** __`/users/doctors/{specialty_title}`__ - filter doctors by specialty.
+- **Request GET** __`/users/doctors/{specialty_id}`__ - filter doctors by specialty.
 
 **Query Parameters**
 
 | Parameter | Type   | Required | Description  |
 |-----------|--------|----------|--------------|
-| `specialty_title`  | string | Yes      | Doctor's specialty. |
+| `specialty_id`  | string | Yes      | Doctor's specialty. |
 
 
 **Response**: 
@@ -283,10 +284,9 @@ Content-Type: application/json.
     200 OK success status response
     
     [{
-      "doctor_id": "{1}",
+      "doctor_id": "1",
       "user_id": "2",
-      "licence": "XX-12345-XX",
-      "specialty_title": "Pulmonology",
+      "specialty_id": "{specialty_id}",
       "working_hours": "{"Mon": "{ open: 9, close: 11 }", "Tue": "{ open: 11, close: 13 }", "Wed": "{ open: 9, close: 11 }", "Thu": "{ open: 11, close: 13 }", "Fri": "{ open: 13, close: 17 }", "Sat": "{ open: 9, close: 11 }", "Sun": "{ open: 11, close: 13 }"}",
       "availability": "true"
     }]
@@ -305,7 +305,7 @@ Content-Type: application/json.
 | Parameter | Type   | Required | Description  |
 |-----------|--------|----------|--------------|
 | `user_id`  | string | Yes      |  User ID. |
-| `specialty_title`  | string | Yes      |  Specialty's title. |
+| `specialty_id`  | string | Yes      |  Specialty's ID. |
 | `working_hours`  | string | Yes      | Doctor's working hours. |
 | `availability`  | boolean | Yes      |  Doctor's availability. |
 
@@ -318,8 +318,7 @@ Content-Type: application/json.
     [{
       "doctor_id": "2"
       "user_id": "4",
-      "licence": "XX-67891-XX",
-      "specialty_title": "Cardiology",
+      "specialty_id": "2",
       "working_hours": "{"Mon": "{ open: 9, close: 13 }", "Tue": "{ open: 13, close: 17 }", "Wed": "{ open: 9, close: 13 }", "Thu": "{ open: 13, close: 17 }", "Fri": "     { open: 9, close: 13 }", "Sat": "{ open: 13, close: 17 }", "Sun": "{ open: 11, close: 14 }"}",
       "availability": "true"
     }]
@@ -344,7 +343,7 @@ Content-Type: application/json.
 | Parameter | Type   | Required | Description  |
 |-----------|--------|----------|--------------|
 | `doctor_id`  | string | Yes      | The doctor ID for change properties in necessary account. |
-| `specialty_title`  | string | Yes      | Change the specialty from "pulmonology" to "internal medicine". |
+| `specialty_id`  | string | Yes      | Change the specialty from "1" to "3". |
 
 **Response**: 
 Content-Type: application/json.
@@ -357,7 +356,7 @@ Content-Type: application/json.
 
   400 Bad Request
     [{
-    "error": "Invalid specialty title format"
+    "error": "Invalid specialty ID format"
   }]
 ```
 
@@ -681,6 +680,155 @@ Content-Type: application/json.
 
 ```
 
+### Specialty endpoints
+
+- **Request GET** __`/specialties`__ - Get all specialties.
+
+**Response**: 200 OK success status response.
+Content-Type: application/json.
+```
+    [
+    {
+      "specialty_id": "1",
+      "specialty_title": "Pulmonology",
+      "disease_id": "1",
+    },
+    {
+      "specialty_id": "2",
+      "specialty_title": "Cardiology",
+      "disease_id": "2",
+    },
+    ...
+    ]
+```
+
+- **Request GET** __`/specialties/{specialty_id}`__ -  Get a specialty by ID.
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `specialty_id`  | string | Yes      | The disease ID. |
+
+
+**Response**: 
+Content-Type: application/json.
+
+```
+    If the record with id === specialty_id exists:
+
+    200 OK success status response
+    
+    [{
+      "specialty_id": "{specialty_id}",
+      "specialty_title": "Pulmonology",
+      "disease_id": "1",
+    }]
+
+    If specialty_id is invalid (not uuid):
+
+    400 Bad Request
+
+    [{
+      "error": "Invalid specialty ID."
+    }]
+
+    If the record with id === specialty_id doesn't exist:
+
+   404 Not Found
+    
+    [{
+      "error": "Specialty not found."
+    }]
+```
+
+- **Request POST** __`specialties`__ - create a new specialty (id will be added automatically) (Requires JWT Authentication).
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `specialty_title`  | string | Yes      |  The specialty title. |
+| `disease_id`  | string | Yes      |  Disease's belong to this specialty ID. |
+
+**Response**: 
+Content-Type: application/json.
+
+```
+    If the record was successfully created:
+    201 Created
+    [{
+      "specialty_id": "3",
+      "specialty_title": "Internal medicine",
+      "disease_id": "1",
+    }]
+
+    If the request body does not contain required fields:
+    400 Bad Request
+    [{
+      "error": "Invalid data."
+    }]
+
+    If the user does not authorize:
+    401 Unauthorized
+    [{
+      "error": "Authorization required."
+    }]
+```
+
+- **Request PATCH** __`/specialties/{specialty_id}`__ - Update specialty's properties (Requires JWT Authentication).
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `specialty_id`  | string | Yes      | The specialty ID for change properties in necessary account. |
+| `disease_id`  | string | Yes      | Change the diseases's ID from "2" to "4". |
+
+**Response**: 
+Content-Type: application/json.
+
+```
+  200 OK success status response
+  [{
+    "message": "Specialty with ID {specialty_id} has been updated successfully"
+  }]
+
+  400 Bad Request
+    [{
+    "error": "Invalid input data format"
+  }]
+```
+
+- **Request DELETE** __`/specialties/{specialty_id}`__ - Delete a specialty (Requires JWT Authentication).
+
+**Query Parameters**
+
+| Parameter | Type   | Required | Description  |
+|-----------|--------|----------|--------------|
+| `specialty_id`  | string | Yes      | The specialty ID to delete the specialty. |
+
+**Response**: 
+Content-Type: application/json.
+
+```
+  204 No Content: if the record was found and deleted successfully
+  [{
+    "message": "Specialty with ID {specialty_id} has been deleted successfully"
+  }]
+
+  400 Bad Request: if the specialty_id parameter is invalid.
+  [{
+    "error": "Invalid specialty ID"
+  }]
+
+  404 Not Found: if the record with the given specialty_id does not exist in the database.
+  [{
+    "error": "Specialty ID does not exist"
+  }]
+
+```
+
 ### Disease endpoints
 
 - **Request GET** __`/diseases`__ - Get all diseases.
@@ -692,12 +840,12 @@ Content-Type: application/json.
    {
       "disease_id": "1",
       "disease_title": "pneumonia",
-      "specialty_title": "Pulmonology",
+      "specialty_id": "1",
     },
      {
       "disease_id": "2",
       "disease_title": "hypertension",
-      "specialty_title": "Cardiology",
+      "specialty_id": "2",
     },
     ...
     ]
@@ -723,7 +871,7 @@ Content-Type: application/json.
     [{
       "disease_id": "{disease_id}",
       "disease_title": "pneumonia",
-      "specialty_title": "Pulmonology"
+      "specialty_id": "1"
     }]
 
     If disease_id is invalid (not uuid):
@@ -750,7 +898,7 @@ Content-Type: application/json.
 | Parameter | Type   | Required | Description  |
 |-----------|--------|----------|--------------|
 | `disease_title`  | string | Yes      |  The disease title. |
-| `specialty_title`  | string | Yes      |  Doctor's specialty. |
+| `specialty_id`  | string | Yes      |  Specialty's ID. |
 
 **Response**: 
 Content-Type: application/json.
@@ -761,7 +909,7 @@ Content-Type: application/json.
     [{
       "disease_id": "2",
       "disease_title": COPD",
-      "specialty_title": "Pulmonology"
+      "specialty_id": "1"
     }]
 
     If the request body does not contain required fields:
@@ -792,7 +940,7 @@ Content-Type: application/json.
 ```
   200 OK success status response
   [{
-    "message": "Disease entity with ID {disease_id} has been updated successfully"
+    "message": "Disease with ID {disease_id} has been updated successfully"
   }]
 
   400 Bad Request
@@ -815,7 +963,7 @@ Content-Type: application/json.
 ```
   204 No Content: if the record was found and deleted successfully
   [{
-    "message": "Disease entity with ID {disease_id} has been deleted successfully"
+    "message": "Disease with ID {disease_id} has been deleted successfully"
   }]
 
   400 Bad Request: if the disease_id parameter is invalid.
@@ -1001,169 +1149,6 @@ Content-Type: application/json.
   404 Not Found: if the record with the given appointmentId does not exist in the database.
   [{
     "error": "Appointment ID does not exist"
-  }]
-
-```
-### Verification endpoints
-
-- **Request GET** __`/verifications`__ - Get all verifications (Requires JWT Authentication).
-
-**Response**: 200 OK success status response.
-Content-Type: application/json.
-```
-   [
-   {
-      "verification_id": "1",
-      "licence": "XX-12345-XX",
-      "admin_id": "1",
-      "status": "verified",
-      "date: "19.10.2023",
-      "notes": "licence from 01.11.2016",
-    },
-   {
-      "verification_id": "2",
-      "licence": "XX-67891-XX",
-      "admin_id": "1",
-      "status": "verified",
-      "date: "19.10.2023",
-      "notes": "licence from 17.07.2014",
-    },
-    ...
-    ]
-```
-
-- **Request GET** __`/verifications/{verification_id}`__ - Get a verification by ID (Requires JWT Authentication).
-
-**Query Parameters**
-
-| Parameter | Type   | Required | Description  |
-|-----------|--------|----------|--------------|
-| `verification_id`  | string | Yes      | The verification ID. |
-
-
-**Response**: 
-Content-Type: application/json.
-
-```
-    If the record with id === verification_id exists:
-
-    200 OK success status response
-    
-    [{
-      "verification_id": "{verification_id}",
-      "licence": "XX-12345-XX",
-      "admin_id": "1",
-      "status": "verified",
-      "date: "19.10.2023",
-      "notes": "licence from 01.11.2016"
-    }]
-
-    If verification_id is invalid (not uuid):
-
-    400 Bad Request
-
-    [{
-      "error": "Invalid verification ID."
-    }]
-
-    If the record with id === verification_id doesn't exist:
-
-   404 Not Found
-    
-    [{
-      "error": "Verification not found."
-    }]
-```
-
-- **Request POST** __`/verifications`__ - create a new verification_id (id will be added automatically) (Requires JWT Authentication).
-
-**Query Parameters**
-
-| Parameter | Type   | Required | Description  |
-|-----------|--------|----------|--------------|
-| `licence`  | string | Yes      | Doctor's licence. |
-| `admin_id`  | string | Yes      | Admin ID. |
-| `Status`  | string | Yes      |  Approvement status. |
-| `Date`  | string | Yes      | Date when an Admin create this verification. |
-| `Notes`  | string | Yes      |  Additional info about verification. |
-
-**Response**: 
-Content-Type: application/json.
-
-```
-    If the record was successfully created:
-    201 Created
-    [{
-      "verification_id": "3",
-      "licence": "XX-23456-XX",
-      "admin_id": "1",
-      "status": "processing",
-      "date: "19.10.2023",
-      "notes": "the data to verify is not enough"
-    }]
-
-    If the request body does not contain required fields:
-    400 Bad Request
-    [{
-      "error": "Invalid data."
-    }]
-
-    If the user does not authorize:
-    401 Unauthorized
-    [{
-      "error": "Authorization required."
-    }]
-```
-
-- **Request PATCH** __`/verifications/{verification_id}`__ - Update verification's properties (Requires JWT Authentication).
-
-**Query Parameters**
-
-| Parameter | Type   | Required | Description  |
-|-----------|--------|----------|--------------|
-| `verification_id`  | string | Yes      | The verification ID for change properties in necessary entity. |
-| `notes`  | string | Yes      | Change the notes from "the data to verify is not enough" to "licence from 15.09.2023". |
-
-**Response**: 
-Content-Type: application/json.
-
-```
-  200 OK success status response
-  [{
-    "message": "Verification entity with ID {verification_id} has been updated successfully"
-  }]
-
-  400 Bad Request
-    [{
-    "error": "Invalid input data format"
-  }]
-```
-
-- **Request DELETE** __`/verifications/{verification_id}`__ - Delete a verification (Requires JWT Authentication).
-
-**Query Parameters**
-
-| Parameter | Type   | Required | Description  |
-|-----------|--------|----------|--------------|
-| `verification_id`  | string | Yes      | The verification ID to delete verification's entity. |
-
-**Response**: 
-Content-Type: application/json.
-
-```
-  204 No Content: if the record was found and deleted successfully
-  [{
-    "message": "Verification entity with ID {verification_id} has been deleted successfully"
-  }]
-
-  400 Bad Request: if the verification_id parameter is invalid.
-  [{
-    "error": "Invalid verification ID"
-  }]
-
-  404 Not Found: if the record with the given verification_id does not exist in the database.
-  [{
-    "error": "Verification ID does not exist"
   }]
 
 ```
