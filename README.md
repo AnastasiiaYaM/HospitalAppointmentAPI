@@ -154,13 +154,16 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request PATCH** __`/users/{user_Id}`__ - Update user's properties.
+- **Request PUT** __`/users/{user_Id}`__ - Update user's properties.
 
 **Query Parameters**
 
 | Parameter | Type   | Required | Description  |
 |-----------|--------|----------|--------------|
 | `user_id`  | string | Yes      | The user ID for change properties in necessary account. |
+| `role_type`  | string | Yes      |  User's role ('Doctor', 'Patient' or 'Admin'). |
+| `email`  | string | Yes      |  User's email. |
+| `first_name`  | string | Yes      | User's first name. |
 | `last_name`  | string | Yes      | Change the last name from "Vakulenko" to "Kopytko". |
 
 **Response**: 
@@ -336,7 +339,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request PATCH** __`/users/doctors/{doctor_id}`__ - Update doctor's properties (Requires JWT Authentication).
+- **Request PUT** __`/users/doctors/{doctor_id}`__ - Update doctor's properties (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -344,6 +347,8 @@ Content-Type: application/json.
 |-----------|--------|----------|--------------|
 | `doctor_id`  | string | Yes      | The doctor ID for change properties in necessary account. |
 | `specialty_id`  | string | Yes      | Change the specialty from "1" to "3". |
+| `working_hours`  | string | Yes      | Doctor's working hours. |
+| `availability`  | boolean | Yes      |  Doctor's availability. |
 
 **Response**: 
 Content-Type: application/json.
@@ -484,13 +489,14 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request PATCH** __`/users/patients/{patient_id}`__ - Update patient's properties (Requires JWT Authentication).
+- **Request PUT** __`/users/patients/{patient_id}`__ - Update patient's properties (Requires JWT Authentication).
 
 **Query Parameters**
 
 | Parameter | Type   | Required | Description  |
 |-----------|--------|----------|--------------|
 | `patient_id`  | string | Yes      | The patient ID for change properties in necessary account. |
+| `disease_id`  | string | Yes      |  Disease ID. |
 | `info`  | string | Yes      | Change the info from "high blood pressure" to "chest pain and high blood pressure". |
 
 **Response**: 
@@ -627,7 +633,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request PATCH** __`/users/admins/{admin_id}`__ - Update admin's properties (Requires JWT Authentication).
+- **Request PUT** __`/users/admins/{admin_id}`__ - Update admin's properties (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -776,13 +782,14 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request PATCH** __`/specialties/{specialty_id}`__ - Update specialty's properties (Requires JWT Authentication).
+- **Request PUT** __`/specialties/{specialty_id}`__ - Update specialty's properties (Requires JWT Authentication).
 
 **Query Parameters**
 
 | Parameter | Type   | Required | Description  |
 |-----------|--------|----------|--------------|
 | `specialty_id`  | string | Yes      | The specialty ID for change properties in necessary account. |
+| `specialty_title`  | string | Yes      |  The specialty title. |
 | `disease_id`  | string | Yes      | Change the diseases's ID from "2" to "4". |
 
 **Response**: 
@@ -925,7 +932,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request PATCH** __`/diseases/{disease_id}`__ - Update disease's properties (Requires JWT Authentication).
+- **Request PUT** __`/diseases/{disease_id}`__ - Update disease's properties (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -933,6 +940,7 @@ Content-Type: application/json.
 |-----------|--------|----------|--------------|
 | `disease_id`  | string | Yes      | The user ID for change properties in necessary account. |
 | `disease_title`  | string | Yes      | Change the diseases's title from "COPD" to "chronic obstructive pulmonary disease". |
+| `specialty_id`  | string | Yes      |  Specialty's ID. |
 
 **Response**: 
 Content-Type: application/json.
@@ -1094,14 +1102,18 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request PATCH** __`appointments/{appointment_Id}`__ - Updates the details of a specific appointment. (Requires JWT Authentication).
+- **Request PUT** __`appointments/{appointment_Id}`__ - Updates the details of a specific appointment. (Requires JWT Authentication).
 
 **Query Parameters**
 
 | Parameter | Type   | Required | Description  |
 |-----------|--------|----------|--------------|
 | `appointment_Id`  | string | Yes      | The appointment ID for change settings. |
+| `doctor_id`  | string | Yes      | Doctor ID. |
+| `status`  | string | Yes      | The appointment status. |
 | `date`  | string | Yes      | Change the date from "20.10.2023" to "21.10.2023". |
+| `start`  | string | Yes      |  Time when appointment starts. |
+| `end`  | string | Yes      |  Time when appointment ends. |
 
 **Response**: 
 Content-Type: application/json.
@@ -1259,7 +1271,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request PATCH** __`/reviews/{review_id}`__ - Update review's properties.
+- **Request PUT** __`/reviews/{review_id}`__ - Update review's properties.
 
 **Query Parameters**
 
@@ -1267,6 +1279,9 @@ Content-Type: application/json.
 |-----------|--------|----------|--------------|
 | `review_id`  | string | Yes      | The user ID for change properties in necessary account. |
 | `creator`  | string | Yes      | Change the creator from "Patient" to ""Admin". |
+| `appointment_id`  | string | Yes      | Appointment ID. |
+| `rate`  | string | Yes      |  Appointment's rate. |
+| `message`  | string | Yes      |  Review message. |
 
 **Response**: 
 Content-Type: application/json.
@@ -1412,14 +1427,18 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request PATCH** __`/conflicts/{conflict_id}`__ - Update conflict's enyity properties (Requires JWT Authentication).
+- **Request PUT** __`/conflicts/{conflict_id}`__ - Update conflict's enyity properties (Requires JWT Authentication).
 
 **Query Parameters**
 
 | Parameter | Type   | Required | Description  |
 |-----------|--------|----------|--------------|
 | `conflict_id`  | string | Yes      | The user ID for change properties in necessary account. |
+| `admin_id`  | string | Yes      |  Admin ID. |
 | `appointment_id`  | string | Yes      | Change the appointment ID  from "3" to "2". |
+| `reason`  | string | Yes      |  The reason of the conflict. |
+| `stasus`  | string | Yes      |  Conflict's status. |
+
 
 **Response**: 
 Content-Type: application/json.
