@@ -177,7 +177,7 @@ Content-Type: application/json.
 
   400 Bad Request
     [{
-    "error": "Invalid email address format"
+    "error": "Invalid user ID"
   }]
 ```
 
@@ -212,7 +212,7 @@ Content-Type: application/json.
 
 ## Doctor endpoints
 
-- **Request GET** __`/users/doctors`__ - Get all doctors.
+- **Request GET** __`/doctors`__ - Get all doctors.
 
 **Response**: 200 OK success status response.
 Content-Type: application/json.
@@ -228,7 +228,7 @@ Content-Type: application/json.
     ...
     ]
 ```
-- **Request GET** __`/users/doctors/{doctor_id}`__ - Get a doctor by ID.
+- **Request GET** __`/doctors/{doctor_id}`__ - Get a doctor by ID.
 
 **Query Parameters**
 
@@ -271,7 +271,7 @@ Content-Type: application/json.
 ```
 
 
-- **Request GET** __`/users/doctors/{specialty_id}`__ - filter doctors by specialty.
+- **Request GET** __`/doctors/{specialty_id}`__ - filter doctors by specialty.
 
 **Query Parameters**
 
@@ -301,7 +301,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request POST** __`/users/doctors`__ - create a new doctor (id will be added automatically) (Requires JWT Authentication).
+- **Request POST** __`/doctors`__ - create a new doctor (id will be added automatically) (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -339,7 +339,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request PUT** __`/users/doctors/{doctor_id}`__ - Update doctor's properties (Requires JWT Authentication).
+- **Request PUT** __`/doctors/{doctor_id}`__ - Update doctor's properties (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -365,7 +365,7 @@ Content-Type: application/json.
   }]
 ```
 
-- **Request DELETE** __`/users/doctors/{doctor_Id}`__ - Delete a doctor (Requires JWT Authentication).
+- **Request DELETE** __`/doctors/{doctor_Id}`__ - Delete a doctor (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -395,7 +395,7 @@ Content-Type: application/json.
 ```
 ## Patient endpoints
 
-- **Request GET** __`/users/patients`__ - Get all patients (Requires JWT Authentication).
+- **Request GET** __`/patients`__ - Get all patients (Requires JWT Authentication).
 
 **Response**: 200 OK success status response.
 Content-Type: application/json.
@@ -411,7 +411,7 @@ Content-Type: application/json.
     ...
     ]
 ```
-- **Request GET** __`/users/patients/{patient_id}`__ - Get a patient by ID (Requires JWT Authentication).
+- **Request GET** __`/patients/{patient_id}`__ - Get a patient by ID (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -453,7 +453,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request POST** __`/users/patients`__ - create a new patient (id will be added automatically) (Requires JWT Authentication).
+- **Request POST** __`/patients`__ - create a new patient (id will be added automatically) (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -489,7 +489,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request PUT** __`/users/patients/{patient_id}`__ - Update patient's properties (Requires JWT Authentication).
+- **Request PUT** __`/patients/{patient_id}`__ - Update patient's properties (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -514,7 +514,7 @@ Content-Type: application/json.
   }]
 ```
 
-- **Request DELETE** __`/users/patients/{patient_id}`__ - Delete a patient (Requires JWT Authentication).
+- **Request DELETE** __`/patients/{patient_id}`__ - Delete a patient (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -545,7 +545,7 @@ Content-Type: application/json.
 
 ## Admin endpoints
 
-- **Request GET** __`/users/admins`__ - Get all admins (Requires JWT Authentication).
+- **Request GET** __`/admins`__ - Get all admins (Requires JWT Authentication).
 
 **Response**: 200 OK success status response.
 Content-Type: application/json.
@@ -599,7 +599,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request POST** __`/users/admins`__ - create a new admin (id will be added automatically) (Requires JWT Authentication).
+- **Request POST** __`/admins`__ - create a new admin (id will be added automatically) (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -633,7 +633,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request PUT** __`/users/admins/{admin_id}`__ - Update admin's properties (Requires JWT Authentication).
+- **Request PUT** __`/admins/{admin_id}`__ - Update admin's properties (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -657,7 +657,7 @@ Content-Type: application/json.
   }]
 ```
 
-- **Request DELETE** __`/users/admins/{admin_id}`__ - Delete an admin (Requires JWT Authentication).
+- **Request DELETE** __`/admins/{admin_id}`__ - Delete an admin (Requires JWT Authentication).
 
 **Query Parameters**
 
@@ -1167,7 +1167,7 @@ Content-Type: application/json.
 
 ### Review endpoints
 
-- **Request GET** __`/reviews`__ - Get all users.
+- **Request GET** __`/reviews`__ - Get all reviews.
 
 **Response**: 200 OK success status response.
 Content-Type: application/json.
