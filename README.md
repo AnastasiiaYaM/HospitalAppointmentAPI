@@ -22,13 +22,13 @@
 
 ## Description
 
-This API is an Hospital Appointment Scheduler REST API built with Node.js, using the Model–View–Controller (MVC) architectural pattern. It allows users to book, update, retrieve and delete appointments with doctors. Users need to be authenticated to access these features, ensuring that all appointment routes are secure.
+This API is an Hospital Appointment Scheduler REST API built with Node.js, using the Model–View–Controller (MVC) architectural pattern. It allows users to book, update, retrieve and delete appointments with doctors. 
 
 ## Technologies
 
 - JavaScript
 - Node.js (Express Framework)
-- JSON Web Token (authentication)
+- Own implementation of JSON Web Token
 - MySQL (Database)
 - Docker container
 
@@ -147,11 +147,6 @@ Content-Type: application/json.
       "error": "Invalid data."
     }]
 
-    If the user does not authorize:
-    401 Unauthorized
-    [{
-      "error": "Authorization required."
-    }]
 ```
 
 - **Request PUT** __`/users/{user_Id}`__ - Update user's properties.
@@ -301,7 +296,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request POST** __`/doctors`__ - create a new doctor (id will be added automatically) (Requires JWT Authentication).
+- **Request POST** __`/doctors`__ - create a new doctor (id will be added automatically).
 
 **Query Parameters**
 
@@ -332,14 +327,9 @@ Content-Type: application/json.
       "error": "Invalid data."
     }]
 
-    If the user does not authorize:
-    401 Unauthorized
-    [{
-      "error": "Authorization required."
-    }]
 ```
 
-- **Request PUT** __`/doctors/{doctor_id}`__ - Update doctor's properties (Requires JWT Authentication).
+- **Request PUT** __`/doctors/{doctor_id}`__ - Update doctor's properties.
 
 **Query Parameters**
 
@@ -365,7 +355,7 @@ Content-Type: application/json.
   }]
 ```
 
-- **Request DELETE** __`/doctors/{doctor_Id}`__ - Delete a doctor (Requires JWT Authentication).
+- **Request DELETE** __`/doctors/{doctor_Id}`__ - Delete a doctor.
 
 **Query Parameters**
 
@@ -395,7 +385,7 @@ Content-Type: application/json.
 ```
 ## Patient endpoints
 
-- **Request GET** __`/patients`__ - Get all patients (Requires JWT Authentication).
+- **Request GET** __`/patients`__ - Get all patients.
 
 **Response**: 200 OK success status response.
 Content-Type: application/json.
@@ -411,7 +401,7 @@ Content-Type: application/json.
     ...
     ]
 ```
-- **Request GET** __`/patients/{patient_id}`__ - Get a patient by ID (Requires JWT Authentication).
+- **Request GET** __`/patients/{patient_id}`__ - Get a patient by ID.
 
 **Query Parameters**
 
@@ -453,7 +443,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request POST** __`/patients`__ - create a new patient (id will be added automatically) (Requires JWT Authentication).
+- **Request POST** __`/patients`__ - create a new patient (id will be added automatically).
 
 **Query Parameters**
 
@@ -482,14 +472,9 @@ Content-Type: application/json.
       "error": "Invalid data."
     }]
 
-    If the user does not authorize:
-    401 Unauthorized
-    [{
-      "error": "Authorization required."
-    }]
 ```
 
-- **Request PUT** __`/patients/{patient_id}`__ - Update patient's properties (Requires JWT Authentication).
+- **Request PUT** __`/patients/{patient_id}`__ - Update patient's properties.
 
 **Query Parameters**
 
@@ -514,7 +499,7 @@ Content-Type: application/json.
   }]
 ```
 
-- **Request DELETE** __`/patients/{patient_id}`__ - Delete a patient (Requires JWT Authentication).
+- **Request DELETE** __`/patients/{patient_id}`__ - Delete a patient.
 
 **Query Parameters**
 
@@ -545,7 +530,7 @@ Content-Type: application/json.
 
 ## Admin endpoints
 
-- **Request GET** __`/admins`__ - Get all admins (Requires JWT Authentication).
+- **Request GET** __`/admins`__ - Get all admins.
 
 **Response**: 200 OK success status response.
 Content-Type: application/json.
@@ -559,7 +544,7 @@ Content-Type: application/json.
     ...
     ]
 ```
-- **Request GET** __`/users/admins/{admin_id}`__ - Get an admin by ID (Requires JWT Authentication).
+- **Request GET** __`/users/admins/{admin_id}`__ - Get an admin by ID.
 
 **Query Parameters**
 
@@ -599,7 +584,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request POST** __`/admins`__ - create a new admin (id will be added automatically) (Requires JWT Authentication).
+- **Request POST** __`/admins`__ - create a new admin (id will be added automatically).
 
 **Query Parameters**
 
@@ -626,14 +611,9 @@ Content-Type: application/json.
       "error": "Invalid data."
     }]
 
-    If the user does not authorize:
-    401 Unauthorized
-    [{
-      "error": "Authorization required."
-    }]
 ```
 
-- **Request PUT** __`/admins/{admin_id}`__ - Update admin's properties (Requires JWT Authentication).
+- **Request PUT** __`/admins/{admin_id}`__ - Update admin's properties.
 
 **Query Parameters**
 
@@ -657,7 +637,7 @@ Content-Type: application/json.
   }]
 ```
 
-- **Request DELETE** __`/admins/{admin_id}`__ - Delete an admin (Requires JWT Authentication).
+- **Request DELETE** __`/admins/{admin_id}`__ - Delete an admin.
 
 **Query Parameters**
 
@@ -748,7 +728,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request POST** __`specialties`__ - create a new specialty (id will be added automatically) (Requires JWT Authentication).
+- **Request POST** __`specialties`__ - create a new specialty (id will be added automatically).
 
 **Query Parameters**
 
@@ -775,14 +755,9 @@ Content-Type: application/json.
       "error": "Invalid data."
     }]
 
-    If the user does not authorize:
-    401 Unauthorized
-    [{
-      "error": "Authorization required."
-    }]
 ```
 
-- **Request PUT** __`/specialties/{specialty_id}`__ - Update specialty's properties (Requires JWT Authentication).
+- **Request PUT** __`/specialties/{specialty_id}`__ - Update specialty's properties.
 
 **Query Parameters**
 
@@ -807,7 +782,7 @@ Content-Type: application/json.
   }]
 ```
 
-- **Request DELETE** __`/specialties/{specialty_id}`__ - Delete a specialty (Requires JWT Authentication).
+- **Request DELETE** __`/specialties/{specialty_id}`__ - Delete a specialty.
 
 **Query Parameters**
 
@@ -898,7 +873,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request POST** __`diseases`__ - create a new disease (id will be added automatically) (Requires JWT Authentication).
+- **Request POST** __`diseases`__ - create a new disease (id will be added automatically).
 
 **Query Parameters**
 
@@ -925,14 +900,9 @@ Content-Type: application/json.
       "error": "Invalid data."
     }]
 
-    If the user does not authorize:
-    401 Unauthorized
-    [{
-      "error": "Authorization required."
-    }]
 ```
 
-- **Request PUT** __`/diseases/{disease_id}`__ - Update disease's properties (Requires JWT Authentication).
+- **Request PUT** __`/diseases/{disease_id}`__ - Update disease's properties.
 
 **Query Parameters**
 
@@ -957,7 +927,7 @@ Content-Type: application/json.
   }]
 ```
 
-- **Request DELETE** __`/diseases/{disease_id}`__ - Delete a disease (Requires JWT Authentication).
+- **Request DELETE** __`/diseases/{disease_id}`__ - Delete a disease.
 
 **Query Parameters**
 
@@ -988,7 +958,7 @@ Content-Type: application/json.
 
 ### Appointment endpoints
 
-- **Request GET** __`/appointments`__ - Retrieves a list of all appointments. (Requires JWT Authentication).
+- **Request GET** __`/appointments`__ - Retrieves a list of all appointments. 
 
 **Response**: 200 OK success status response.
 Content-Type: application/json.
@@ -1016,7 +986,7 @@ Content-Type: application/json.
     ]
 ```
 
-- **Request GET** __`/appointments/{appointment_Id}`__ - Retrieves the details of a specific appointment. (Requires JWT Authentication).
+- **Request GET** __`/appointments/{appointment_Id}`__ - Retrieves the details of a specific appointment.
 
 **Query Parameters**
 
@@ -1060,7 +1030,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request POST** __`appointments`__ - Creates a new appointment (id will be added automatically). (Requires JWT Authentication).
+- **Request POST** __`appointments`__ - Creates a new appointment (id will be added automatically).
 
 **Query Parameters**
 
@@ -1095,14 +1065,9 @@ Content-Type: application/json.
       "error": "Invalid data."
     }]
 
-    If the user does not authorize:
-    401 Unauthorized
-    [{
-      "error": "Authorization required."
-    }]
 ```
 
-- **Request PUT** __`appointments/{appointment_Id}`__ - Updates the details of a specific appointment. (Requires JWT Authentication).
+- **Request PUT** __`appointments/{appointment_Id}`__ - Updates the details of a specific appointment.
 
 **Query Parameters**
 
@@ -1136,7 +1101,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request DELETE** __`appointments/{appointment_Id}`__ - Delete a specific appointment. (Requires JWT Authentication).
+- **Request DELETE** __`appointments/{appointment_Id}`__ - Delete a specific appointment.
 
 **Query Parameters**
 
@@ -1233,7 +1198,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request POST** __`/reviews`__ - create a new review (id will be added automatically) (Requires JWT Authentication).
+- **Request POST** __`/reviews`__ - create a new review (id will be added automatically).
 
 **Query Parameters**
 
@@ -1264,11 +1229,6 @@ Content-Type: application/json.
       "error": "Invalid data."
     }]
 
-    If the user does not authorize:
-    401 Unauthorized
-    [{
-      "error": "Authorization required."
-    }]
 ```
 
 - **Request PUT** __`/reviews/{review_id}`__ - Update review's properties.
@@ -1329,7 +1289,7 @@ Content-Type: application/json.
 
 ### Conflict endpoints
 
-- **Request GET** __`/conflicts`__ - Get all conflicts (Requires JWT Authentication).
+- **Request GET** __`/conflicts`__ - Get all conflicts.
 
 **Response**: 200 OK success status response.
 Content-Type: application/json.
@@ -1347,7 +1307,7 @@ Content-Type: application/json.
 ```
 
 
-- **Request GET** __`/conflicts/{conflict_id}`__ - Get a conflict by ID (Requires JWT Authentication).
+- **Request GET** __`/conflicts/{conflict_id}`__ - Get a conflict by ID.
 
 **Query Parameters**
 
@@ -1389,7 +1349,7 @@ Content-Type: application/json.
     }]
 ```
 
-- **Request POST** __`/conflicts`__ - create a new conflict (id will be added automatically) (Requires JWT Authentication).
+- **Request POST** __`/conflicts`__ - create a new conflict (id will be added automatically).
 
 **Query Parameters**
 
@@ -1420,14 +1380,9 @@ Content-Type: application/json.
       "error": "Invalid data."
     }]
 
-    If the user does not authorize:
-    401 Unauthorized
-    [{
-      "error": "Authorization required."
-    }]
 ```
 
-- **Request PUT** __`/conflicts/{conflict_id}`__ - Update conflict's enyity properties (Requires JWT Authentication).
+- **Request PUT** __`/conflicts/{conflict_id}`__ - Update conflict's enyity properties.
 
 **Query Parameters**
 
@@ -1455,7 +1410,7 @@ Content-Type: application/json.
   }]
 ```
 
-- **Request DELETE** __`/conflicts/{conflict_id}`__ - Delete a conflict (Requires JWT Authentication).
+- **Request DELETE** __`/conflicts/{conflict_id}`__ - Delete a conflict.
 
 **Query Parameters**
 
@@ -1524,4 +1479,4 @@ docker compose down
 
 ## Database schema
 
-![db-schema](https://github.com/AnastasiiaYaM/HospitalAppointmentAPI/blob/main/db%20schema.png)
+![db-schema](https://github.com/AnastasiiaYaM/HospitalAppointmentAPI/blob/main/db_schema_updated.png)
