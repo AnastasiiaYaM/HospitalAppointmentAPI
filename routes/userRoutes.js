@@ -1,23 +1,30 @@
-const express = require("express");
+const express = require('express');
+const userController = require('../controllers/user');
 const router = express.Router();
 
-const users = require("../controllers/userController");
+// GET users
+router.get('/', (req, res) => {
+    userController.findAll(req, res);
+})
 
-  
-    router.post("/api/v1/users", users.createUser);
-  
+// GET user
+router.get('/:id', (req, res) => {
+    userController.findOne(req, res);
+})
 
-    router.get("/api/v1/users", users.findAllUsers);
-  
+// POST user
+router.post('/', (req, res) => {
+    userController.create(req, res);
+})
 
-    router.get("/api/v1/users/:id", users.findUser);
-  
+// PUT user
+router.put('/:id', (req, res) => {
+    userController.update(req, res);
+})
 
-    router.put("/api/v1/users/:id", users.updateUser);
-  
-    // Delete a Tutorial with id
-    router.delete("/api/v1/users/:id", users.deleteUser);
-  
+// DELETE user
+router.delete('/:id', (req, res) => {
+    userController.delete(req, res);
+})
 
-  
-  module.exports = router;
+module.exports = router;
