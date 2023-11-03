@@ -1,10 +1,15 @@
-const Sequelize = require('sequelize');
+const db = {
+  HOST: process.env.DB_HOST,
+  USERNAME: process.env.DB_USER,
+  PASSWORD: process.env.DB_PASS,
+  DB: process.env.DB_NAME,
+  dialect: "mysql",
+  pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000
+  }
+}
 
-const sequelize = new Sequelize('hospitalappointmentapi', 'root', '2023$$SOLVD', {
-  dialect: 'mysql',
-  host: 'localhost'
-});
-
-
-
-module.exports = sequelize;
+module.exports = db;
