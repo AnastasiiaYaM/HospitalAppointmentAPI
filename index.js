@@ -48,4 +48,4 @@ db.sequelize.sync();
 
 
 const PORT = process.env.PORT;
-app.listen(PORT, () => console.log('Server ts listening to 3001.'));
+app.listen(PORT, () => console.log('Server ts listening to 3000.'));
