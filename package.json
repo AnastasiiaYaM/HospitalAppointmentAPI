@@ -4,8 +4,33 @@
   "description": "Personal project for SOLVD's trainee",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "test": "jest --watchAll",
+    "start": "node index.js",
+    "coverage": "jest --coverage"
+  },
+  "jest": {
+    "verbose": true,
+    "coverageReporters": [
+      [
+        "lcov",
+        {
+          "projectRoot": ".."
+        }
+      ]
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!axios)"
+    ],
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "**/routes/**/*.js",
+      "!**/node_modules/**"
+    ]
+  },
+  "nyc": {
+    "reporter": [
+      "lcov"
+    ]
   },
   "author": "Anastasiia Melenevych",
   "license": "ISC",
@@ -15,9 +40,17 @@
     "crypto": "^1.0.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "mysql2": "^3.6.2",
-    "nodemon": "^3.0.1",
+    "iconv-lite": "^0.6.3",
+    "mysql2": "^3.6.3",
     "sequelize": "^6.33.0",
     "validator": "^13.11.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
+    "jest-mysql": "^2.0.0",
+    "node-mocks-http": "^1.13.0",
+    "nodemon": "^3.0.1",
+    "nyc": "^15.1.0"
   }
 }

@@ -3,7 +3,7 @@ const Appointment = db.appointments;
 const Validator = require('validator');
 
 exports.findAll = (req, res) => {
-    const id = req.query.id;
+    const id = req.params.id;
     const condition = id ? {id: id} : null;
     Appointment.findAll({where: condition}).then(data => {
         res.send(data);

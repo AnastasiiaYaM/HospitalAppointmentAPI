@@ -3,7 +3,7 @@ const Doctor = db.doctors;
 const Validator = require('validator');
 
 exports.findAll = (req, res) => {
-    const id = req.query.id;
+    const id = req.params.id;
     const condition = id ? {id: id} : null;
     Doctor.findAll({where: condition}).then(data => {
         res.send(data);

@@ -1,0 +1,16 @@
+[{ 
+    "user_id": "1",
+    "role_type": "admin",
+    "email": "zxc@gmail.com",
+    "password": "password",
+    "first_name": "Name",
+    "last_name": "Lastname"
+},
+{ 
+    "user_id": "2",
+    "role_type": "doctor",
+    "email": "doc@gmail.com",
+    "password": "password2",
+    "first_name": "Name2",
+    "last_name": "Lastname2"
+}]

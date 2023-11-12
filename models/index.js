@@ -7,6 +7,15 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USERNAME, dbConfig.PASSWOR
     pool: dbConfig.pool
 });
 
+sequelize
+ .authenticate()
+ .then(() => {
+  console.log("DATABASE CONNECTED");
+ })
+ .catch((err) => {
+  console.log(err);
+ });
+
 const db = {
     Sequelize: Sequelize,
     sequelize: sequelize
