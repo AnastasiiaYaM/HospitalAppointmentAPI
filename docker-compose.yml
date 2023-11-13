@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+
+  app:
+    image: ayamelenevych/hospitalappointmentapi
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - appdb
+    restart: unless-stopped
+    env_file: ./.env
+    ports: 
+      - ${PORT}:${PORT}
+    
+  appdb:
+    image: mysql:8.0
+    container_name: db-1
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_DATABASE: ${appdb}
+      MYSQL_USER: ${root}
+      MYSQL_PASSWORD: ${DB_PASS}
+    ports:
+      - "3306:3306"
+    volumes:
+      - appdb:/var/lib/mysql
+      - dumps/appdb:/data/application/appdb
+    command: --init-file /data/application/appdb
+
+  
+      
+
