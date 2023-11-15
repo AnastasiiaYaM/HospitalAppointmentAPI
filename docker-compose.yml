@@ -25,10 +25,10 @@ services:
       MYSQL_USER: ${root}
       MYSQL_PASSWORD: ${DB_PASS}
     ports:
-      - "3306:3306"
+      - "8080:8080"
     volumes:
-      - appdb:/var/lib/mysql
-      - dumps/appdb:/data/application/appdb
+      - ./dumps:/docker-entrypoint-dumpsdb.d
+     
     command: --init-file /data/application/appdb
 
   
